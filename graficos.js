@@ -1,8 +1,8 @@
 /*************************************************************************************************************
 Este código irá plotar 5 gráficos: 
-1 - Quantidade de Imóveis por Modaliddade de Venda (Gráfico de Colunas)
-2 - Valor Total de Imóveis por Modaliddade de Venda (Gráfico de Colunas)
-3 - Preço Oferta Total de Imóveis por Modaliddade de Venda (Gráfico de Colunas)
+1 - Quantidade de Imóveis por Modalidade de Venda (Gráfico de Colunas)
+2 - Valor Total de Imóveis por Modalidade de Venda (Gráfico de Colunas)
+3 - Preço Oferta Total de Imóveis por Modalidade de Venda (Gráfico de Colunas)
 4 - Quantidade de Imóveis por Cidade (Gráfico de Pizza)
 5 - Valor Total de Imóveis por Cidade (Gráfico de Pizza)
 Com base nos dados do arquivo "imoveis.json" recebidos será calculado os totalizadores de quantidade e valor
@@ -15,7 +15,7 @@ bem como a distribuição do volume de venda por cidades tanto em termos de quan
 // Recebe os dados carregados do arquivo Json "imoveis" 
 function carregaGraficos(dadosImoveisJson){
 	// Carregando o pacotes necessários - versão mais recente
-  	google.charts.load('current', {'packages':['corechart','treemap'],'language':'pt'});
+  	google.charts.load('current', {'packages':['corechart'],'language':'pt'});
   	// Função de retorno para chamar a função que desenha os gráficos
   	google.charts.setOnLoadCallback(
         function() { // Função anônima que obtém as informações e chama as funções que montam cada gráfico
@@ -65,13 +65,14 @@ function montaTabelaDadosPorModalidade(dadosImoveisJson){
 }
 
 // Para cada Cidade que houver
-// Monta um array de objetos com as informações de Cidade, Qantidade de Imóveis, Valor Total
+// Monta um array de objetos com as informações de Cidade, Quantidade de Imóveis, Valor Total
 // Objetos no seguinte formato: {"cidade": "a","quantidade": "999","valorTotal": "999"}
+// Retorna as 10 cidades com maior volume de vendas
 function montaTabelaDadosPorCidade(dadosImoveisJson){
 	cidades = [];
 	// Lendo registros de cada imóvel
 	$.each(dadosImoveisJson, function(indice,imovel){
-		// Encontrando o indice da modalidade de venda do registro lido no array cidades
+		// Encontrando o índice da cidade do registro lido no array cidades
 		var posicao = cidades.findIndex(elementos => elementos.cidade === imovel.cidade.trim());
 		// Retorna um valor float para poder realizar a soma
 		valorAvaliacao = parseFloat((imovel.valorAvaliacao).replace(".","").replace(",","."));
@@ -112,6 +113,7 @@ function montaTabelaDadosPorCidade(dadosImoveisJson){
 function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectiva quantidade de imóveis
 	var dadosQuantidade = [];
+	// Adicionando coluna de anotações para mostrar a quantidade no topo de cada coluna e coluna de estilo
 	dadosQuantidade[0] = ['Modalidade','Quantidade',{role:'annotation'},{role:'style'}]; // Nomes das colunas
 	var cor = "";
 	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
@@ -163,7 +165,7 @@ function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
 function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectivo Valor Total de imóveis
  	var dadosValorTotal = [];
-  	// Adicioando coluna de anotações para mostrar o valor total em R$ e coluna de estilo para adicionar borda
+  	// Adicionando coluna de anotações para mostrar o valor total em R$ e coluna de estilo
   	dadosValorTotal[0] = ['Modalidade','Valor Total de Imóveis',{role:'annotation'},{role:'style'}]; // Nomes das colunas
   	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
 	  	valorTotalFormatoMoeda = formataMoeda(conteudo.valorTotal);
@@ -177,7 +179,7 @@ function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
 	  	height: 500, // Altura
 		legend: 'none',
 		vAxis:{ 
-			title: 'Valor Total',
+			title: 'Valor Total (milhões de reais)',
 			format: 'short',
 			titleTextStyle:{
 		  		fontSize: 16
@@ -214,7 +216,7 @@ function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
 function desenhaGraficoPrecoPorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectivo de Preço Oferta Total de imóveis
  	var dadosPrecoTotal = [];
-  	// Adicioando coluna de anotações para mostrar o preço oferta total em R$ e coluna de estilo para adicionar borda
+  	// Adicionando coluna de anotações para mostrar o preço oferta total em R$ e coluna de estilo
   	dadosPrecoTotal[0] = ['Modalidade','Preço Oferta Total de Imóveis',{role:'annotation'},{ role:'style'}]; // Nomes das colunas
   	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
 	  	precoTotalFormatoMoeda = formataMoeda(conteudo.precoTotal);
@@ -228,7 +230,7 @@ function desenhaGraficoPrecoPorModalidade(tabelaDadosPorModalidade){
 	  	height: 500, // Altura
 		legend: 'none',
 		vAxis:{ 
-			title: 'Preço Oferta Total',
+			title: 'Preço Oferta Total (milhões de reais)',
 			format: 'short',
 			titleTextStyle:{
 		  		fontSize: 16
@@ -269,7 +271,7 @@ function desenhaGraficoVendaPorCidade(tabelaDadosPorCidade){
     	fontName: 'Segoe UI',
     	height: 400,
 		width: 800,
-		pieSliceText: 'percentage',
+		pieSliceText: 'percentage', // Cada fatia irá mostrar a porcentagem correspondente àquela cidade
 		chartArea :{
   			top: '8%',
   			left: '1%',

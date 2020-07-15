@@ -9,9 +9,10 @@ arquivo em formato Json mesmo.
 $(document).ready(function () {
 	// Carregando dados codificados em formato JSON a partir do arquivo imoveis.json usando uma solicitação GET HTTP
 	$.getJSON( "imoveis.json", function(dadosImoveisJson) {
-		// Funções a seguir estão no arquivo graficos.js
+		// Função seguir está no arquivo tabela.js
 		// Chamando a função que irá montar a tabela com base nos dados dos imóveis
 		montaTabela(dadosImoveisJson);
+		// Função seguir está no arquivo graficos.js
 		// Chamando a função que irá plotar os gráficos com base nos dados dos imóveis
     	carregaGraficos(dadosImoveisJson); 
   	});
