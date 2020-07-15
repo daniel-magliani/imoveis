@@ -95,16 +95,15 @@ function montaTabelaDadosPorCidade(dadosImoveisJson){
 	// Ordenando o array pelo valorTotal decrescente
 	cidades = cidades.sort(function(a,b) { 
 		return b.valorTotal - a.valorTotal;
-    //return a.valorTotal < b.valorTotal ? -1 : a.valorTotal > b.valorTotal ? 1 : 0; XX
-  });
+  	});
 
-  // Retorando os dez primeiros registros do array
-  cidades = cidades.slice(0,10);
+  	// Retorando os dez primeiros registros do array
+  	cidades = cidades.slice(0,10);
 
-  // Iterando o array para atribuir uma cor por cidade (10 Maiores Volumes de Venda)
-  $.each(cidades, function (indice, cidade){
-    cidade.cor =  atribuiCorFatias(indice) // Atribuindo uma cor para cada cidade
-  });
+  	// Iterando o array para atribuir uma cor por cidade (10 Maiores Volumes de Venda)
+  	$.each(cidades, function (indice, cidade){
+    	cidade.cor =  atribuiCorFatias(indice) // Atribuindo uma cor para cada cidade
+  	});
     
 	return cidades;
 }
@@ -112,21 +111,19 @@ function montaTabelaDadosPorCidade(dadosImoveisJson){
 // Desenha gráfico da Quantidade de Imóveis por Modalidade de Venda
 function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectiva quantidade de imóveis
-  var dadosQuantidade = [];
-  dadosQuantidade[0] = ['Modalidade','Quantidade',{role:'annotation'},{role:'style'}]; // Nomes das colunas
-  var cor = "";
-  $.each(tabelaDadosPorModalidade, function(indice,conteudo){
-  	cor = conteudo.cor;
-  	dadosQuantidade.push([conteudo.modalidade,conteudo.quantidade,conteudo.quantidade,'color:'+cor+';opacity: 0.9;stroke-color:' + cor + '; stroke-width: 5;']);
-  	// 'opacity: 0.9;stroke-color:' + cor + '; stroke-width: 5;'
-  });
+	var dadosQuantidade = [];
+	dadosQuantidade[0] = ['Modalidade','Quantidade',{role:'annotation'},{role:'style'}]; // Nomes das colunas
+	var cor = "";
+	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
+		cor = conteudo.cor;
+	  	dadosQuantidade.push([conteudo.modalidade,conteudo.quantidade,conteudo.quantidade,'color:'+cor+';opacity: 0.9;stroke-color:' + cor + '; stroke-width: 5;']);
+	 });
 
-  // Configurando opções do gráfico
-  var opcoes = {
-  	fontName:'Segoe UI',
-  	width: 500, // Largura
-  	height: 500, // Altura
-		//colors: ['orange'], XX
+	// Configurando opções do gráfico
+	var opcoes = {
+		fontName:'Segoe UI',
+	  	width: 500, // Largura
+	  	height: 500, // Altura
 		legend: 'none',
 		vAxis:{ 
 			title: 'Quantidade de Imóveis',
@@ -143,12 +140,10 @@ function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
 		},
 		annotations:{
 			textStyle:{
-				//color: 'black', XX
 				italic: true,
-			fontSize: 14
+				fontSize: 14
 			},
-			alwaysOutside: true,
-			//highContrast: false XX
+			alwaysOutside: true
 		},
 		chartArea :{
 			top: '8%',
@@ -159,7 +154,7 @@ function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
   
 	// Instanciando um objeto do tipo gráfico de barras e informando a div alvo
 	var tabelaQuantidade = google.visualization.arrayToDataTable(dadosQuantidade);
-	tabelaQuantidade.sort([{ column: 1, desc: true }]);
+	tabelaQuantidade.sort([{ column: 1, desc: true }]); // Ordenando as colunas de forma decrescente
 	var graficoQuantidade = new google.visualization.ColumnChart(document.getElementById('grafico_quantidade_modalidade'));
 	graficoQuantidade.draw(tabelaQuantidade,opcoes);
 }
@@ -167,21 +162,19 @@ function desenhaGraficoQuantidadePorModalidade(tabelaDadosPorModalidade){
 // Desenha gráfico do Valor Total de Imóveis por Modalidade de Venda
 function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectivo Valor Total de imóveis
-  var dadosValorTotal = [];
-  // Adicioando coluna de anotações para mostrar o valor total em R$ e coluna de estilo para adicionar borda
-  dadosValorTotal[0] = ['Modalidade','Valor Total de Imóveis',{role:'annotation'},{role:'style'}]; // Nomes das colunas
-  $.each(tabelaDadosPorModalidade, function(indice,conteudo){
-  	valorTotalFormatoMoeda = formataMoeda(conteudo.valorTotal);
-  	dadosValorTotal.push([conteudo.modalidade,conteudo.valorTotal,valorTotalFormatoMoeda,'color:'+conteudo.cor+';opacity: 0.9;stroke-color:' + conteudo.cor + '; stroke-width: 5;']);
-  	//'stroke-color: orange; stroke-width: 5;' XX
-  });
+ 	var dadosValorTotal = [];
+  	// Adicioando coluna de anotações para mostrar o valor total em R$ e coluna de estilo para adicionar borda
+  	dadosValorTotal[0] = ['Modalidade','Valor Total de Imóveis',{role:'annotation'},{role:'style'}]; // Nomes das colunas
+  	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
+	  	valorTotalFormatoMoeda = formataMoeda(conteudo.valorTotal);
+	  	dadosValorTotal.push([conteudo.modalidade,conteudo.valorTotal,valorTotalFormatoMoeda,'color:'+conteudo.cor+';opacity: 0.9;stroke-color:' + conteudo.cor + '; stroke-width: 5;']);
+  	});
 
-  // Configurando opções do gráfico
-  var opcoes = {
-  	fontName:'Segoe UI',
-  	width: 600, // Largura
-  	height: 500, // Altura
-		//colors: ['orange'], XX
+  	// Configurando opções do gráfico
+  	var opcoes = {
+	  	fontName:'Segoe UI',
+	  	width: 600, // Largura
+	  	height: 500, // Altura
 		legend: 'none',
 		vAxis:{ 
 			title: 'Valor Total',
@@ -212,7 +205,7 @@ function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
   	
 	// Instanciando um objeto do tipo gráfico de barras e informando a div alvo 
 	var tabelaValor = google.visualization.arrayToDataTable(dadosValorTotal);
-	tabelaValor.sort([{ column: 1, desc: true }]);
+	tabelaValor.sort([{ column: 1, desc: true }]); // Ordenando as colunas de forma decrescente
 	var graficoValor = new google.visualization.ColumnChart(document.getElementById('grafico_valor_total_modalidade'));
 	graficoValor.draw(tabelaValor,opcoes);
 }
@@ -220,20 +213,19 @@ function desenhaGraficoValorPorModalidade(tabelaDadosPorModalidade){
 // Desenha gráfico Indicador do Preço Total de Imóveis por Modalidade de Venda
 function desenhaGraficoPrecoPorModalidade(tabelaDadosPorModalidade){
 	// Monta uma tabela em formato de array bidimensional com os dados da Modalidade de Venda e respectivo de Preço Oferta Total de imóveis
-  var dadosPrecoTotal = [];
-  // Adicioando coluna de anotações para mostrar o preço oferta total em R$ e coluna de estilo para adicionar borda
-  dadosPrecoTotal[0] = ['Modalidade','Preço Oferta Total de Imóveis',{role:'annotation'},{ role:'style'}]; // Nomes das colunas
-  $.each(tabelaDadosPorModalidade, function(indice,conteudo){
-  	precoTotalFormatoMoeda = formataMoeda(conteudo.precoTotal);
-  	dadosPrecoTotal.push([conteudo.modalidade,conteudo.precoTotal,precoTotalFormatoMoeda,'color:'+conteudo.cor+';opacity: 0.9;stroke-color:' + conteudo.cor + '; stroke-width: 5;']);
-  });
+ 	var dadosPrecoTotal = [];
+  	// Adicioando coluna de anotações para mostrar o preço oferta total em R$ e coluna de estilo para adicionar borda
+  	dadosPrecoTotal[0] = ['Modalidade','Preço Oferta Total de Imóveis',{role:'annotation'},{ role:'style'}]; // Nomes das colunas
+  	$.each(tabelaDadosPorModalidade, function(indice,conteudo){
+	  	precoTotalFormatoMoeda = formataMoeda(conteudo.precoTotal);
+	  	dadosPrecoTotal.push([conteudo.modalidade,conteudo.precoTotal,precoTotalFormatoMoeda,'color:'+conteudo.cor+';opacity: 0.9;stroke-color:' + conteudo.cor + '; stroke-width: 5;']);
+  	});
 
-  // Configurando opções do gráfico
-  var opcoes = {
-  	fontName:'Segoe UI',
-  	width: 600, // Largura
-  	height: 500, // Altura
-		//colors: ['orange'], XX
+  	// Configurando opções do gráfico
+  	var opcoes = {
+	  	fontName:'Segoe UI',
+	  	width: 600, // Largura
+	  	height: 500, // Altura
 		legend: 'none',
 		vAxis:{ 
 			title: 'Preço Oferta Total',
@@ -264,55 +256,53 @@ function desenhaGraficoPrecoPorModalidade(tabelaDadosPorModalidade){
   	
 	// Instanciando um objeto do tipo gráfico de barras e informando a div alvo 
 	var tabelaPreco = google.visualization.arrayToDataTable(dadosPrecoTotal);
-	tabelaPreco.sort([{ column: 1, desc: true }]);
+	tabelaPreco.sort([{ column: 1, desc: true }]); // Ordenando as colunas de forma decrescente
 	var graficoPreco = new google.visualization.ColumnChart(document.getElementById('grafico_preco_total_modalidade'));
 	graficoPreco.draw(tabelaPreco,opcoes);
 }
 
-// Desenha gráfico Indicador de Distribuição de Quantidade e Valores de Venda Imóveis por Cidade
+// Desenha gráficos do Indicador da Distribuição de Quantidade de Imóveis e Valores de Venda Imóveis por Cidade
 function desenhaGraficoVendaPorCidade(tabelaDadosPorCidade){
-  // console.log(tabelaDadosPorCidade); XX
-	//opçoes
-  var opcoes = {
-    fontName: 'Segoe UI',
-    height: 400,
+
+	// Definindo opções dos gráficos de pizza
+  	var opcoes = {
+    	fontName: 'Segoe UI',
+    	height: 400,
 		width: 800,
-		//legend: 'labeled', XX
 		pieSliceText: 'percentage',
-		//tooltip: {ignoreBounds: true}, XX
 		chartArea :{
   			top: '8%',
   			left: '1%',
   			width: "70%",
   			height: "70%"
-  	}  
-  };
+  		}  
+  	};
 
-	// Monta uma tabela em formato de array bidimensional com os dados da Cidade e respectiva Quantidade e Valor Total de Venda de Imóveis
-  var dadosCidadesQuantidade = [];
-  var dadosCidadesValor = [];
-  var opcoesCores = [];
-  dadosCidadesQuantidade[0] = ['Cidade','Quantidade'];
-  dadosCidadesValor[0] = ['Cidade','Valor'];
-  $.each(tabelaDadosPorCidade, function(indice,conteudo){
-  	dadosCidadesQuantidade.push([conteudo.cidade,conteudo.quantidade]);
-  	dadosCidadesValor.push([conteudo.cidade,conteudo.valorTotal]);
-  	opcoesCores.push(conteudo.cor);
-  });   
+	// Monta uma tabela em formato de array bidimensional dadosCidadesQuantidade com os dados da Cidade e respectiva Quantidade de Imóveis
+	// Monta uma tabela em formato de array bidimensional dadosCidadesValor com os dados da Cidade e respectivo Valor Total de Venda de Imóveis
+  	// Coloca no array opcoesCores a cor específica para cada cidade 
+  	var dadosCidadesQuantidade = [];  	
+  	var dadosCidadesValor = [];  	
+  	var opcoesCores = [];
+  	dadosCidadesQuantidade[0] = ['Cidade','Quantidade'];
+  	dadosCidadesValor[0] = ['Cidade','Valor'];
+  	$.each(tabelaDadosPorCidade, function(indice,conteudo){
+	  	dadosCidadesQuantidade.push([conteudo.cidade,conteudo.quantidade]);
+	  	dadosCidadesValor.push([conteudo.cidade,conteudo.valorTotal]);
+	  	opcoesCores.push(conteudo.cor);
+  	});   
 	
-  // Atribui as cores XX
+  	// Atribui as cores de cada fatia do gráfico pizza
 	opcoes.colors = opcoesCores;
 
 	// Instanciando um objeto do tipo pizza e informando a div alvo 
-  var tabelaCidades = google.visualization.arrayToDataTable(dadosCidadesQuantidade);
-  //	tabelaCidades.sort([{ column: 1, desc: true }]); XX
-  var graficoCidades = new google.visualization.PieChart(document.getElementById('grafico_cidades'));
-  graficoCidades.draw(tabelaCidades,opcoes);
+  	var tabelaCidades = google.visualization.arrayToDataTable(dadosCidadesQuantidade);
+    var graficoCidades = new google.visualization.PieChart(document.getElementById('grafico_cidades'));
+  	graficoCidades.draw(tabelaCidades,opcoes);
 
-  // Instanciando um objeto do tipo pizza e informando a div alvo 
-  var tabelaCidadesValor = google.visualization.arrayToDataTable(dadosCidadesValor);
-  //  	tabelaCidadesValor.sort([{ column: 1, desc: true }]); XX
-  var graficoCidadesValor = new google.visualization.PieChart(document.getElementById('grafico_cidades_valor'));
-  graficoCidadesValor.draw(tabelaCidadesValor,opcoes);
+  	// Instanciando um objeto do tipo pizza e informando a div alvo 
+  	var tabelaCidadesValor = google.visualization.arrayToDataTable(dadosCidadesValor);
+  	var graficoCidadesValor = new google.visualization.PieChart(document.getElementById('grafico_cidades_valor'));
+	graficoCidadesValor.draw(tabelaCidadesValor,opcoes);
 }
 

@@ -1,5 +1,4 @@
 function montaTabela(dadosImoveisJson){
-
   $('#tblImoveis').DataTable({
       "data": dadosImoveisJson,
       "columns": [
@@ -20,7 +19,6 @@ function montaTabela(dadosImoveisJson){
       },
       {
           "render": function ( data, type, row ) {
-                      //return data.replace('.',',') + '%';
                       return parseFloat(data).toLocaleString() + '%';
                     },
           "targets": [6]
@@ -54,7 +52,6 @@ function montaTabela(dadosImoveisJson){
         "thousands": "."
       },
       lengthChange: true,
-
       initComplete: function () {
         this.api().columns().every( function () {
           var column = this;
@@ -64,19 +61,16 @@ function montaTabela(dadosImoveisJson){
                   var val = $.fn.dataTable.util.escapeRegex(
                       $(this).val()
                   );
-
                   column
                       .search( val ? '^'+val+'$' : '', true, false )
                       .draw();
-              } );
-
+              });
 
           column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ){            
               select.append( '<option value="'+d+'">'+d+'</option>' )
           });
         });
       }
-
   });
 }  
  
